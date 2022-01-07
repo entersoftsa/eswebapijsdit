@@ -1,0 +1,22 @@
+﻿/*! Entersoft Application Server WEB API - v2.2.28 - 2018-05-09
+* Copyright (c) 2018 Entersoft SA; Licensed Apache-2.0 */
+
+/*
+	Global Styles
+*/
+.form-group .k-widget { width: 100%; }
+
+.es-module { }
+.es-module .tooltip.in { opacity: 0.9; }
+.es-module .collapse.in { display: initial; }
+
+.modal.in .modal-dialog { -webkit-transform: translate(0,0) !important; transform: translate(0,0) !important; }
+.modal.fade.in { opacity: 1 !important; }
+.modal-backdrop.in { opacity: 0.5 !important; }
+
+
+/* 
+	Module - specific styles
+*/
+
+.es-module-login { width: 35%; margin: 0px auto; }
