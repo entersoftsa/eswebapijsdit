@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.0.1 - 2022-01-07
+/*! Entersoft Application Server WEB API - v3.0.2 - 2022-01-11
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -364,7 +364,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!scrollerCommandParams || !scrollerCommandParams.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -417,7 +419,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!formCommandParams || !formCommandParams.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -437,7 +441,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!params || !params.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -459,7 +465,7 @@ eskbApp.config(['$logProvider',
 
                             var webapitokenOK = function(a) {
                                 var hds;
-                                if (a) {
+                                if (a && angular.isFunction(a.headers)) {
                                     hds = a.headers();
                                     if (hds && hds["x-es-refresh-token"]) {
                                         esGlobals.setWebApiToken(hds["x-es-refresh-token"], a.config.url || "-");
@@ -3933,7 +3939,9 @@ $scope.dofetchPublicQuery = function() {
 
                                 if (window.esIsB2B) {
                                     if (!execParams || !execParams.FTRAGID  || !window.FTRAGID) {
-                                        throw new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden");
+                                        var deferred = $q.defer();
+                                        deferred.reject( new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden"));
+                                        return processWEBAPIPromise(deferred.promise);
                                     }
                                 }
 
@@ -5852,7 +5860,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.0.1";
+    var version = "3.0.2";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -8427,20 +8435,22 @@ defaultGridHeight: string or undefined
         var esCache = $injector.get('esCache');
         var aPart = lang.split("-")[0];
 
+        var langURLPrefix = window.ESIsB2B ? '/' : '';
+
         $translate.use(aPart);
 
         if (Globalize) {
             if (!esCache.getItem("Globalize_" + lang)) {
                 $q.all([
-                    $http.get("languages/" + aPart + "-ca-gregorian.json"),
-                    $http.get("languages/" + aPart + "-numbers.json"),
-                    $http.get("languages/" + aPart + "-currencies.json"),
+                    $http.get(langURLPrefix + "languages/" + aPart + "-ca-gregorian.json"),
+                    $http.get(langURLPrefix + "languages/" + aPart + "-numbers.json"),
+                    $http.get(langURLPrefix + "languages/" + aPart + "-currencies.json"),
 
-                    $http.get("languages/likelySubtags.json"),
-                    $http.get("languages/timeData.json"),
-                    $http.get("languages/weekData.json"),
-                    $http.get("languages/currencyData.json"),
-                    $http.get("languages/numberingSystems.json")
+                    $http.get(langURLPrefix + "languages/likelySubtags.json"),
+                    $http.get(langURLPrefix + "languages/timeData.json"),
+                    $http.get(langURLPrefix + "languages/weekData.json"),
+                    $http.get(langURLPrefix + "languages/currencyData.json"),
+                    $http.get(langURLPrefix + "languages/numberingSystems.json")
                 ]).then(function(ret) {
                         _.forEach(ret, function(x) {
                             Globalize.load(x.data);
@@ -8462,7 +8472,7 @@ defaultGridHeight: string or undefined
             if (kendo) {
                 kendo.culture(lang);
                 if (!esCache.getItem("kendo_" + lang)) {
-                    var kendoMessagesUrl = "languages/kendo.messages." + lang + ".min.js";
+                    var kendoMessagesUrl = langURLPrefix + "languages/kendo.messages." + lang + ".min.js";
 
                     $.getScript(kendoMessagesUrl,
                         function() {

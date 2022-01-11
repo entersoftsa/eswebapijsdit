@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.0.1 - 2022-01-07
+/*! Entersoft Application Server WEB API - v3.0.2 - 2022-01-11
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -364,7 +364,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!scrollerCommandParams || !scrollerCommandParams.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -417,7 +419,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!formCommandParams || !formCommandParams.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -437,7 +441,9 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 if (!params || !params.FTRAGID || !window.FTRAGID) {
-                                    throw new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden.");
+                                    var deferred = $q.defer();
+                                    deferred.reject( new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter FTRAGID set is forbidden."));
+                                    return processWEBAPIPromise(deferred.promise);
                                 }
                             }
 
@@ -459,7 +465,7 @@ eskbApp.config(['$logProvider',
 
                             var webapitokenOK = function(a) {
                                 var hds;
-                                if (a) {
+                                if (a && angular.isFunction(a.headers)) {
                                     hds = a.headers();
                                     if (hds && hds["x-es-refresh-token"]) {
                                         esGlobals.setWebApiToken(hds["x-es-refresh-token"], a.config.url || "-");
@@ -3933,7 +3939,9 @@ $scope.dofetchPublicQuery = function() {
 
                                 if (window.esIsB2B) {
                                     if (!execParams || !execParams.FTRAGID  || !window.FTRAGID) {
-                                        throw new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden");
+                                        var deferred = $q.defer();
+                                        deferred.reject( new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden"));
+                                        return processWEBAPIPromise(deferred.promise);
                                     }
                                 }
 
@@ -5852,7 +5860,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.0.1";
+    var version = "3.0.2";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
