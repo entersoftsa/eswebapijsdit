@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.0.2 - 2022-01-11
+/*! Entersoft Application Server WEB API - v3.0.3 - 2022-01-11
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -3937,7 +3937,7 @@ $scope.dofetchPublicQuery = function() {
                                     execParams = execParams.getExecuteVals();
                                 }
 
-                                if (window.esIsB2B) {
+                                if (window.ESIsB2B) {
                                     if (!execParams || !execParams.FTRAGID  || !window.FTRAGID) {
                                         var deferred = $q.defer();
                                         deferred.reject( new Error("Trying to execute a PQ with no FTRAGID parameter in PQ [" + pqGroupID + "/" + pqFilterID + "] is forbidden"));
@@ -5860,7 +5860,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.0.2";
+    var version = "3.0.3";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
