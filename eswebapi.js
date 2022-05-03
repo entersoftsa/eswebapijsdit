@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.0.3 - 2022-01-11
+/*! Entersoft Application Server WEB API - v3.0.6 - 2022-03-31
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -5860,7 +5860,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.0.3";
+    var version = "3.0.6";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -11106,6 +11106,7 @@ defaultGridHeight: string or undefined
                             footerField: "",
                             imageField: "",
                             tagField: "",
+                            simpleView: false
                         };
 
                         var scr = $scope.esPqDef.UIOptions
@@ -12835,7 +12836,7 @@ defaultGridHeight: string or undefined
                 var grdopt = {
                     pageable: {
                         refresh: true,
-                        pageSizes: [20, 50, 100, kendo.ui.Pager.prototype.options.messages.allPages]
+                        pageSizes: [20, 50, 100, 1000]
                     },
                     autoBind: false,
                     sortable: true,
@@ -12911,10 +12912,10 @@ defaultGridHeight: string or undefined
                     pageSize: resOptions.getPageSizeForUI()
                 };
 
-                var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100])).sort(function(a, b) {
+                var zArr = _.uniq(_.union([resOptions.getPageSizeForUI()], [20, 50, 100, 1000])).sort(function(a, b) {
                     return a - b
                 });
-                zArr.push(kendo.ui.Pager.prototype.options.messages.allPages);
+
                 var grdopt = {
                     pageable: {
                         pageSizes: zArr
@@ -13519,6 +13520,17 @@ defaultGridHeight: string or undefined
                 return f ? _.filter(f, function(g) {
                     return g.isAdvanced()
                 }) : [];
+            }
+
+            ESParamsDefinitions.prototype.hasVisibleParams = function() {
+                var f = this.definitions;
+                if (!f) {
+                    return false;
+                }
+
+                return _.filter(f, function(g) {
+                    return g.visible;
+                }).length > 0;
             }
 
             ESParamsDefinitions.prototype.hasAdvancedParams = function() {
