@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.0.7 - 2022-05-04
+/*! Entersoft Application Server WEB API - v3.0.8 - 2022-05-17
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -5860,7 +5860,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.0.7";
+    var version = "3.0.8";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -11130,6 +11130,9 @@ defaultGridHeight: string or undefined
                         var xFields = null;
 
                         $scope.bodyFields = function() {
+
+                            console.log("BF - " + (!xFields ? " NULL " : xFields.length));
+
                             if (xFields) {
                                 return xFields;
                             }
@@ -11166,7 +11169,8 @@ defaultGridHeight: string or undefined
                             return esResolveBlobUrl(item[$scope.UIOptions.imageField], esWebApiService);
                         };
 
-                        $scope.getFieldText = function(item, fieldName) {
+                        $scope.getFieldText = function(item, col) {
+                            var fieldName = col.field;
                             if (!item[fieldName]) return null;
 
                             if (esGlobals.isEmail(fieldName))
@@ -11174,7 +11178,12 @@ defaultGridHeight: string or undefined
                             else if (esGlobals.isPhone(fieldName))
                                 return '<a href="tel:' + item[fieldName] + '">' + item[fieldName] + "</a>";
                             else
-                                return item[fieldName];
+                                return col.format ? kendo.toString(item[fieldName], col.format) : item[fieldName];
+                        };
+
+                        $scope.getFieldStyle = function(item, col) {
+                            var fVal = item[col.field];
+                            return (fVal && fVal < 0) ? {color: 'red'} : null;
                         };
 
                         $scope.hasMap = function(item) {
@@ -13070,6 +13079,11 @@ defaultGridHeight: string or undefined
 
                 if (jCol.TextAlignment == "3") {
                     esCol.attributes.style = "text-align: right;";
+                }
+
+                if (esClass === "decimal")
+                {
+                    esCol.attributes.style = (esCol.attributes.style || "") + " # if(" + esCol.field + " < 0) { #color:red;# } # ";
                 }
 
                 //Enum Column

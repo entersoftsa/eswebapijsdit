@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.0.7 - 2022-05-04
+/*! Entersoft Application Server WEB API - v3.0.8 - 2022-05-17
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -5860,7 +5860,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.0.7";
+    var version = "3.0.8";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
