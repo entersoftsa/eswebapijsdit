@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.0.9 - 2022-06-16
+/*! Entersoft Application Server WEB API - v3.0.10 - 2022-06-21
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -3523,9 +3523,14 @@ function($scope, esWebApi, esWebUIHelper) {
                                 }
 
                                 var surl = urlWEBAPI.concat(ESWEBAPI_URL.__PUBLICQUERY_INFO__, group, "/", pqFilterID);
+                                
+                                /* sme explicitly ignoring parameter resolveParams
+                                * For cases like ##(ENDPERIODDATE) does not work well
+
                                 if (resolveParams) {
                                     surl = surl.concat("/true");
                                 }
+                                */
 
                                 var deferred = $q.defer();
                                 if (useCache) {
@@ -5870,7 +5875,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.0.9";
+    var version = "3.0.10";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -11188,7 +11193,7 @@ defaultGridHeight: string or undefined
                             else if (esGlobals.isPhone(fieldName))
                                 return '<a href="tel:' + item[fieldName] + '">' + item[fieldName] + "</a>";
                             else
-                                return col.format ? kendo.toString(item[fieldName], col.format) : item[fieldName];
+                                return col.format ? kendo.format(col.format, item[fieldName]) : item[fieldName];
                         };
 
                         $scope.getFieldStyle = function(item, col) {
