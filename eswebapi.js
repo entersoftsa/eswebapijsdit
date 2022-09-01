@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.1.0 - 2022-09-01
+/*! Entersoft Application Server WEB API - v3.1.1 - 2022-09-01
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -5875,7 +5875,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.1.0";
+    var version = "3.1.1";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -15000,7 +15000,7 @@ defaultGridHeight: string or undefined
                     return;
                 }
 
-                var masterVal = e.data.GID || e.data.ISUDGID || e.data.ItemCode;
+                var masterVal = e.data.ISUDGID || e.data.ISUDCODE;
                 if (!masterVal) {
                     console.log("No value in master row for GID or ISUDGID or ItemCode to query the details");
                     return;
@@ -15037,7 +15037,7 @@ defaultGridHeight: string or undefined
 
                         // remove the run / requery button
                         esGridOptions.toolbar = esGridOptions.toolbar.slice(1);
-                        
+
                         $("<div/>")
                             .appendTo(e.detailCell)
                             .kendoGrid(esGridOptions);
