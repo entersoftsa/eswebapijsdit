@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.1.1 - 2022-09-01
+/*! Entersoft Application Server WEB API - v3.1.3 - 2022-10-19
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -5875,7 +5875,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.1.1";
+    var version = "3.1.3";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
@@ -11633,7 +11633,7 @@ defaultGridHeight: string or undefined
                                             {
                                                 type: "tile",
                                                 urlTemplate:
-                                                    "http://a.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
+                                                    "https://a.tile.openstreetmap.org/#= zoom #/#= x #/#= y #.png",
                                                 attribution:
                                                     "&copy; OpenStreetMap",
                                             },
@@ -13506,9 +13506,7 @@ defaultGridHeight: string or undefined
                     $scope.selectedRows = _.map(
                         selectedRows,
                         function (selItem) {
-                            return evt.sender.dataItem(selItem)[
-                                $scope.invParams.esConnect
-                            ];
+                            return evt.sender.dataItem(selItem)[$scope.invParams.esConnect];
                         }
                     );
                 };
@@ -14986,8 +14984,9 @@ defaultGridHeight: string or undefined
                     };
 
                     grdopt.detailDef = pqDef.UIOptions.detailDef;
-                }
-
+                } 
+                
+                grdopt.change = handleChangeGridRow;
                 grdopt.reBind = 0;
                 return grdopt;
             }
@@ -15002,7 +15001,9 @@ defaultGridHeight: string or undefined
 
                 var masterVal = e.data.ISUDGID || e.data.ISUDCODE;
                 if (!masterVal) {
-                    console.log("No value in master row for GID or ISUDGID or ItemCode to query the details");
+                    console.log(
+                        "No value in master row for GID or ISUDGID or ItemCode to query the details"
+                    );
                     return;
                 }
 
@@ -15012,11 +15013,13 @@ defaultGridHeight: string or undefined
                 var esExecuteParams = createESParams({
                     ISUDGID: masterVal,
                 });
-                var esPQOptions = detailDef.PQOptions || new esGlobals.ESPQOptions().initFromObj({
-                    ServerPaging: false,
-                    WithCount: true,
-                    AutoExecute: true
-                });
+                var esPQOptions =
+                    detailDef.PQOptions ||
+                    new esGlobals.ESPQOptions().initFromObj({
+                        ServerPaging: false,
+                        WithCount: true,
+                        AutoExecute: true,
+                    });
 
                 esWebApiService
                     .fetchPublicQueryInfo(esGroupId, esFilterId, true, true)
