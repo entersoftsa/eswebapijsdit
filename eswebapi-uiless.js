@@ -1,4 +1,4 @@
-/*! Entersoft Application Server WEB API - v3.1.3 - 2022-10-19
+/*! Entersoft Application Server WEB API - v3.1.4 - 2022-10-31
 * Copyright (c) 2022 Entersoft SA; Licensed Apache-2.0 */
 /***********************************
  * Entersoft SA
@@ -364,7 +364,7 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 scrollerCommandParams = scrollerCommandParams || {};
-                                scrollerCommandParams.TAGID = scrollerCommandParams.TAGID || window.TAGID;
+                                scrollerCommandParams.TAGID = window.TAGID;
                                 if (!scrollerCommandParams.TAGID) {
                                     var deferred = $q.defer();
                                     deferred.reject( new Error("Trying to execute Scroller Command [" + scrollerCommandParams.ScrollerID + "/" + scrollerCommandParams.CommandID + "] with no parameter TAGID set is forbidden."));
@@ -421,7 +421,7 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 formCommandParams = formCommandParams || {};
-                                formCommandParams.TAGID = formCommandParams.TAGID || window.TAGID;
+                                formCommandParams.TAGID = window.TAGID;
                                 if (!formCommandParams.TAGID) {
                                     var deferred = $q.defer();
                                     deferred.reject( new Error("Trying to execute form command [" + formCommandParams.EntityID + "/" + formCommandParams.CommandID + "] with no parameter TAGID set is forbidden."));
@@ -445,7 +445,7 @@ eskbApp.config(['$logProvider',
 
                             if (window.ESIsB2B) {
                                 params = params || {};
-                                params.TAGID = params.TAGID || window.TAGID;
+                                params.TAGID = window.TAGID;
                                 if (!params.TAGID) {
                                     var deferred = $q.defer();
                                     deferred.reject( new Error("Trying to execute Scroller [" + groupID + "/" + filterID + "] with no parameter TAGID set is forbidden."));
@@ -3951,7 +3951,7 @@ $scope.dofetchPublicQuery = function() {
                                 if (window.ESIsB2B) {
 
                                     execParams = execParams || {};
-                                    execParams.TAGID = execParams.TAGID || window.TAGID;
+                                    execParams.TAGID = window.TAGID;
 
                                     if (!execParams.TAGID) {
                                         var deferred = $q.defer();
@@ -5875,7 +5875,7 @@ $scope.fetchES00DocumentsByEntityGID = function() {
         return window._; //Underscore must already be loaded on the page 
     });
 
-    var version = "3.1.3";
+    var version = "3.1.4";
     var vParts = _.map(version.split("."), function(x) {
         return parseInt(x);
     });
